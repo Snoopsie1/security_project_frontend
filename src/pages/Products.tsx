@@ -35,8 +35,8 @@ const Products = () => {
 
 
   return (
-    <div>
-     <Table dataSource={productsWithKey} columns={columns}/>
+    <div className='w-40'>
+        <Table dataSource={productsWithKey} columns={columns} size='middle'/>
     </div>
   )
 }
