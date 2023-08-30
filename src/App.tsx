@@ -1,12 +1,12 @@
 import './tailwind-setup.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Foo from './pages/Foo';
+import Products from './pages/Products';
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Foo />}/>
+        <Route path='/' element={<Products />}/>
       </Routes>
     </BrowserRouter>
   )
