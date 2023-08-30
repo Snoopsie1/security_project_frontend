@@ -12,11 +12,6 @@ const Products = () => {
 
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
@@ -33,12 +28,17 @@ const Products = () => {
     key: product.id.toString(),
   }));
 
+  const addProduct = () => {
+    //TODO: Finish this method
+    console.log('ADDING PRODUCT')
+  }
+
 
   return (
-    <div className='w-full mx-4'>
-      <div className='flex flex-row justify-between mx-4'>
+    <div className='w-full p-5'>
+      <div className='flex flex-row justify-between mx-5'>
         <h2 className='text-2xl'>Products</h2>
-        <Button type='primary' className={'w-40'}>Add Product</Button>
+        <Button className='w-40' onClick={() => addProduct()}>Add Product</Button>
       </div>
         <Table dataSource={productsWithKey} columns={columns}/>
     </div>
