@@ -1,8 +1,8 @@
-import './tailwind-setup.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Products from './pages/Products';
 import Layout from './components/layout/Layout';
 import Foo from './pages/Foo';
+import './globals.css';
 
 const App = () => {
   return (

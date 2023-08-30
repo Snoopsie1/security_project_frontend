@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Product } from '../types/product';
 import { getAllProducts } from '../services/product';
-import { Table } from 'antd';
+import { Button, Table } from 'antd';
 
 const Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -35,8 +35,12 @@ const Products = () => {
 
 
   return (
-    <div className='w-40'>
-        <Table dataSource={productsWithKey} columns={columns} size='middle'/>
+    <div className='w-full mx-4'>
+      <div className='flex flex-row justify-between mx-4'>
+        <h2 className='text-2xl'>Products</h2>
+        <Button type='primary' className={'w-40'}>Add Product</Button>
+      </div>
+        <Table dataSource={productsWithKey} columns={columns}/>
     </div>
   )
 }
