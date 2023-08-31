@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 
-
+//TODO: Lav logout som dræber token
 const Login: React.FC = () => {
   const navigate = useNavigate();
   
