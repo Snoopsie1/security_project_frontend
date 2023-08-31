@@ -9,24 +9,22 @@ import './globals.css';
 const App = () => {
   const isAuthenticated = !!localStorage.getItem('jwt'); // Check for JWT in local storage
 
+  const authed = () => {
+    if (!isAuthenticated) return <Navigate to="/login" />;
+    console.log(isAuthenticated);
+    return <Products />;
+  };
+
   return (
     <BrowserRouter>
       <Layout>
         <Routes>
-          {!isAuthenticated ? (
-            // If user is not logged in, show login and register
-            <>
-              <Route path="/" element={<Navigate to="/login" />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-            </>
-          ) : (
-            // If user is logged in, show products and orders
-            <>
-              <Route path="/products" element={<Products />} />
-              <Route path="/purchases" element={<Foo />} /> {/* Skal skiftes til Orders component */}
-            </>
-          )}
+          <Route path="/register" element={isAuthenticated ? <Navigate to="/" /> : <Register />}/>
+          <Route path="/login" element={isAuthenticated ? <Navigate to="/"/> : <Login />}/>
+          <Route path="/" element={authed()}>
+            <Route path="/products" element={<Products />} />
+            <Route path="/purchases" element={<Foo />} /> {/* Skal skiftes til Orders component */}
+          </Route>
         </Routes>
       </Layout>
     </BrowserRouter>

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, Select } from 'antd';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Register: React.FC = () => {
   const [form] = Form.useForm();
   const [submittable, setSubmittable] = useState(false);
+  const navigate = useNavigate();
   
   const values = Form.useWatch([], form);
   
@@ -30,14 +32,15 @@ const Register: React.FC = () => {
     );
   }, [values]);
 
-  const onFinish = async (values: any) => {
+  const onRegister = async (values: any) => {
     console.log(values);
     try {
       const response = await axios.post('http://localhost/api/routes/customer.php', {
-          name: values.name,
-          email: values.email,
-          password: values.password,
-          role_id: values.role,
+        action: 'register',
+        name: values.name,
+        email: values.email,
+        password: values.password,
+        role_id: values.role,
       });
 
       console.log(response.data); // Handle the response from the server
@@ -51,7 +54,7 @@ const Register: React.FC = () => {
       {...layout}
       form={form}
       name="control-hooks"
-      onFinish={onFinish}
+      onFinish={onRegister}
       style={{ maxWidth: 600 }}
     >
       <Form.Item name="name" label="Name" rules={[{ required: true }]}>
@@ -72,9 +75,12 @@ const Register: React.FC = () => {
         </Select>
       </Form.Item>
       <Form.Item {...tailLayout}>
-        <div className='absolute inset-y-0 right-0'>
+        <div className='absolute inset-y-0 right-0 space-x-6'>
+        <Button htmlType="submit" onClick={() => navigate('/')}>
+          Back
+        </Button>
         <Button htmlType="submit" disabled={!submittable}>
-          Submit
+          Register
         </Button>
         </div>
       </Form.Item>

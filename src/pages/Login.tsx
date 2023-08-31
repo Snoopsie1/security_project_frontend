@@ -1,25 +1,43 @@
 import React from 'react';
 import { Button, Checkbox, Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
   
+  const onLogin = async (values: any) => {
+    console.log(values);
+    try {
+      const response = await axios.post('http://localhost/api/routes/customer.php', {
+        action: 'login',
+        email: values.email,
+        password: values.password,
+      });
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
+      const { token } = response.data;
+
+      console.log(response.data);
+      if (token) {
+        localStorage.setItem('jwt', token); // Save JWT to local storage
+        navigate('/'); // Redirect to home or authenticated route
+      } else {
+        console.error('Login failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
   
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
-  
+
   type FieldType = {
-    username?: string;
+    email?: string;
     password?: string;
-    remember?: string;
   };
 
   return (
@@ -29,14 +47,14 @@ const Login: React.FC = () => {
       wrapperCol={{ span: 16 }}
       style={{ maxWidth: 600 }}
       initialValues={{ remember: true }}
-      onFinish={onFinish}
+      onFinish={onLogin}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
     >
       <Form.Item<FieldType>
-        label="Username"
-        name="username"
-        rules={[{ required: true, message: 'Please input your username!' }]}
+        label="Email"
+        name="email"
+        rules={[{ required: true, message: 'Please input your email!' }]}
       >
         <Input />
       </Form.Item>
@@ -49,18 +67,14 @@ const Login: React.FC = () => {
         <Input.Password />
       </Form.Item>
 
-      <div className='flex flex-row gap-x-20'> 
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+      <div className='flex flex-row ml-28 gap-x-20'> 
+        <Form.Item>
           <Button htmlType="submit">
             Submit
           </Button>
         </Form.Item>
-        <Form.Item<FieldType>
-          name="remember"
-          valuePropName="checked"
-          wrapperCol={{ offset: 8, span: 16 }}
-        >
-          <button onClick={() => navigate('/register')}>Register</button>
+        <Form.Item>
+          <Button onClick={() => navigate('/register')}>Register</Button>
         </Form.Item>
 
       </div>
