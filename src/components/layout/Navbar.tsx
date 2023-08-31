@@ -11,12 +11,12 @@ const Navbar = () => {
   const items: MenuProps['items'] = [
     {
       label: 'Products',
-      key: '/',
+      key: '/products',
       icon: <GiftOutlined/>
     },
     {
-      label: 'Orders',
-      key: '/orders',
+      label: 'Purchases',
+      key: '/purchases',
       icon: <DownloadOutlined/>
     }, 
     // TODO: Tilføj Users
