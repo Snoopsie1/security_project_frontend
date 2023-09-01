@@ -1,12 +1,16 @@
 import { type Purchase } from "../types/purchase";
 import { Button, Table, Modal, Input } from "antd";
-import { useFetcher } from "../services/purchase";
+import { useFetcher } from "../services/api";
 import React from "react";
 
 const Order = () => {
-  const { PostPurchase, GetPurchase, DeletePurchase } = useFetcher();
+  const { POST, GET, DELETE } = useFetcher();
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
-  const { data: purchases } = GetPurchase<Purchase[]>({
+  const {
+    data: purchases,
+    isLoading,
+    error,
+  } = GET<Purchase[]>({
     url: "purchase.php",
   });
 
@@ -52,11 +56,11 @@ const Order = () => {
     : null;
 
   const addOrder = (purchase: Purchase) => {
-    PostPurchase<Purchase>({ url: "purchase.php", data: purchase });
+    POST<Purchase>({ url: "purchase.php", data: purchase });
   };
 
   const deleteOrder = (id: number) => {
-    DeletePurchase<number>({ url: "purchase.php", data: id });
+    DELETE<number>({ url: "purchase.php", data: id });
   };
 
   return (
@@ -93,6 +97,8 @@ const Order = () => {
           </Modal>
         </div>
       )}
+      {isLoading && <>page is loading</>}
+      {error && <>page got error</>}
     </div>
   );
 };

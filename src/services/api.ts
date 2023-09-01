@@ -8,29 +8,20 @@ interface RequestConfig<T> {
   data?: T | null;
 }
 
-interface useTypedFetchReturn<T> {
+interface FetchReturn<T> {
   data: T | null;
   isLoading?: boolean;
   error?: string | null;
 }
 
 export const useFetcher = () => {
-  const MakeFetchRequest = <T>({
-    url = "/",
-    method = "GET",
-    data,
-    headers,
-  }: RequestConfig<T>): AxiosPromise<T> => {
-    return axios({ url, method, data, headers });
-  };
-
   const Fetcher = async <T>({
     url,
     method,
     headers,
     data,
   }: RequestConfig<T>): Promise<T> => {
-    const response = await MakeFetchRequest<T>({
+    const response = await axios({
       url: `http://localhost/api/routes/${url}`,
       method,
       headers,
@@ -39,10 +30,7 @@ export const useFetcher = () => {
     return response.data;
   };
 
-  function PostPurchase<T>({
-    url,
-    data,
-  }: RequestConfig<T>): useTypedFetchReturn<T> {
+  function POST<T>({ url, data }: RequestConfig<T>): FetchReturn<T> {
     const [fetchedData, setFetchedData] = React.useState<T | null>(null);
     (async () => {
       const response = await Fetcher<T>({
@@ -56,9 +44,7 @@ export const useFetcher = () => {
     return { data: fetchedData };
   }
 
-  const GetPurchase = <T>({
-    url,
-  }: RequestConfig<T>): useTypedFetchReturn<T> => {
+  const GET = <T>({ url }: RequestConfig<T>): FetchReturn<T> => {
     const [fetchedData, setFetchedData] = React.useState<T | null>(null);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [error, setError] = React.useState<string | null>(null);
@@ -83,10 +69,7 @@ export const useFetcher = () => {
     return { data: fetchedData, isLoading, error };
   };
 
-  const DeletePurchase = <T>({
-    url,
-    data,
-  }: RequestConfig<T>): useTypedFetchReturn<T> => {
+  const DELETE = <T>({ url, data }: RequestConfig<T>): FetchReturn<T> => {
     const [fetchedData, setFetchedData] = React.useState<T | null>(null);
     (async () => {
       const response = await Fetcher<T>({
@@ -99,5 +82,5 @@ export const useFetcher = () => {
     return { data: fetchedData };
   };
 
-  return { PostPurchase, GetPurchase, DeletePurchase };
+  return { POST, GET, DELETE };
 };
