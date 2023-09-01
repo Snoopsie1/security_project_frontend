@@ -2,6 +2,7 @@ import { type Purchase } from "../types/purchase";
 import { Button, Table, Modal, Input } from "antd";
 import { useFetcher } from "../services/api";
 import React from "react";
+import { ColumnsType } from "antd/es/table";
 
 const Order = () => {
   const { POST, GET, DELETE } = useFetcher();
@@ -14,7 +15,14 @@ const Order = () => {
     url: "purchase.php",
   });
 
-  const columns = [
+  type flatPurchase = {
+    id: number;
+    productId: number;
+    productName: string;
+    productPrice: number;
+  };
+
+  const columns: ColumnsType<flatPurchase> = [
     {
       title: "Id",
       dataIndex: "id",
@@ -30,36 +38,46 @@ const Order = () => {
       dataIndex: "productPrice",
       key: "productPrice",
     },
+    {
+      title: "Action",
+      key: "action",
+      width: "10%",
+      render: (_, record) => (
+        <>
+          <Button
+            onClick={() => deletePurchase(record.id)}
+            type="primary"
+            danger
+          >
+            Delete
+          </Button>
+        </>
+      ),
+    },
   ];
 
-  type flatOrder = {
-    id: number;
-    productId: number;
-    productName: string;
-    productPrice: number;
-  };
-
-  const flattenedOrder: flatOrder[] | undefined = purchases?.flatMap((item) =>
-    item.products.map((product) => ({
-      id: item.id,
-      productId: product.id,
-      productName: product.name,
-      productPrice: product.price,
-    }))
+  const flattenedPurchase: flatPurchase[] | undefined = purchases?.flatMap(
+    (item) =>
+      item.products.map((product) => ({
+        id: item.id,
+        productId: product.id,
+        productName: product.name,
+        productPrice: product.price,
+      }))
   );
 
-  const productsWithKey = flattenedOrder
-    ? flattenedOrder.map((order) => ({
-        ...order,
-        key: order.id.toString(),
+  const productsWithKey = flattenedPurchase
+    ? flattenedPurchase.map((purchase) => ({
+        ...purchase,
+        key: purchase.id.toString(),
       }))
     : null;
 
-  const addOrder = (purchase: Purchase) => {
+  const addPurchase = (purchase: Purchase) => {
     POST<Purchase>({ url: "purchase.php", data: purchase });
   };
 
-  const deleteOrder = (id: number) => {
+  const deletePurchase = (id: number) => {
     DELETE<number>({ url: "purchase.php", data: id });
   };
 
