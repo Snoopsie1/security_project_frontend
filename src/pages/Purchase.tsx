@@ -1,17 +1,14 @@
 import { type Purchase } from "../types/purchase";
-import { Button, Table } from "antd";
-import PurchaseFethcer from "../services/order";
+import { Button, Table, Modal, Input } from "antd";
+import { useFetcher } from "../services/purchase";
 import React from "react";
 
 const Order = () => {
-  const { postPurchase, getPurchase, deletePurchase } = PurchaseFethcer();
-  const [purchases, setpurchases] = React.useState<Purchase[]>([]);
-
-  React.useEffect(() => {
-    getPurchase<Purchase[]>({ url: "/purchase.php" }).then((purchases) =>
-      setpurchases(purchases)
-    );
-  }, [getPurchase]);
+  const { PostPurchase, GetPurchase, DeletePurchase } = useFetcher();
+  const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
+  const { data: purchases } = GetPurchase<Purchase[]>({
+    url: "purchase.php",
+  });
 
   const columns = [
     {
@@ -55,11 +52,11 @@ const Order = () => {
     : null;
 
   const addOrder = (purchase: Purchase) => {
-    postPurchase<Purchase>({ url: "/purchase.php", data: purchase });
+    PostPurchase<Purchase>({ url: "purchase.php", data: purchase });
   };
 
   const deleteOrder = (id: number) => {
-    deletePurchase<number>({ url: "/purchase.php", data: id });
+    DeletePurchase<number>({ url: "purchase.php", data: id });
   };
 
   return (
@@ -68,9 +65,32 @@ const Order = () => {
         <div className="w-full p-5">
           <div className="flex flex-row justify-between mx-5">
             <h2 className="text-2xl">Orders</h2>
-            <Button className="w-40">Add Order</Button>
+            <Button onClick={() => setIsModalOpen(true)} className="w-40">
+              Add Order
+            </Button>
           </div>
           <Table dataSource={productsWithKey} columns={columns} />
+          <Modal
+            title={"Create new order"}
+            open={isModalOpen}
+            onOk={() => setIsModalOpen(false)}
+            onCancel={() => setIsModalOpen(false)}
+            footer={[
+              <Button
+                danger
+                type="primary"
+                key="cancel"
+                onClick={() => setIsModalOpen(false)}
+              >
+                cancel
+              </Button>,
+              <Button type="primary" key="create">
+                create
+              </Button>,
+            ]}
+          >
+            <Input placeholder="lort" />
+          </Modal>
         </div>
       )}
     </div>
