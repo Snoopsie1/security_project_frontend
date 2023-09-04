@@ -15,26 +15,25 @@ const Order = () => {
     url: "purchase.php",
   });
 
-  type flatPurchase = {
+  type Iorder = {
     id: number;
-    productId: number;
-    productName: string;
-    productPrice: number;
+    products: string;
+    productPrice: string;
   };
 
-  const columns: ColumnsType<flatPurchase> = [
+  const columns: ColumnsType<Iorder> = [
     {
       title: "Id",
       dataIndex: "id",
       key: "id",
     },
     {
-      title: "ProductName",
-      dataIndex: "productName",
-      key: "productName",
+      title: "Products",
+      dataIndex: "products",
+      key: "products",
     },
     {
-      title: "ProductPrice",
+      title: "Total product price",
       dataIndex: "productPrice",
       key: "productPrice",
     },
@@ -45,7 +44,7 @@ const Order = () => {
       render: (_, record) => (
         <>
           <Button
-            onClick={() => deletePurchase(record.id)}
+            onClick={() => deletePurchase(record.id, "1")}
             type="primary"
             danger
           >
@@ -56,18 +55,19 @@ const Order = () => {
     },
   ];
 
-  const flattenedPurchase: flatPurchase[] | undefined = purchases?.flatMap(
-    (item) =>
-      item.products.map((product) => ({
-        id: item.id,
-        productId: product.id,
-        productName: product.name,
-        productPrice: product.price,
-      }))
-  );
+  const order: Iorder[] | undefined = purchases?.map((item) => ({
+    id: item.id,
+    products: item.products.map((e) => e.name).join(", "),
+    productPrice:
+      String(
+        item.products.reduce((accumulator, product) => {
+          return accumulator + product.price;
+        }, 0)
+      ) + "kr.",
+  }));
 
-  const productsWithKey = flattenedPurchase
-    ? flattenedPurchase.map((purchase) => ({
+  const productsWithKey = order
+    ? order.map((purchase) => ({
         ...purchase,
         key: purchase.id.toString(),
       }))
@@ -77,8 +77,11 @@ const Order = () => {
     POST<Purchase>({ url: "purchase.php", data: purchase });
   };
 
-  const deletePurchase = (id: number) => {
-    DELETE<number>({ url: "purchase.php", data: id });
+  const deletePurchase = (id: number, role: string) => {
+    DELETE({
+      url: `purchase.php/${id}`,
+      params: { role: "1" },
+    });
   };
 
   return (

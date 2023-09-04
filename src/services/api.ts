@@ -5,6 +5,7 @@ interface RequestConfig<T> {
   url: string;
   headers?: Record<string, string>;
   method?: "GET" | "POST" | "DELETE" | "PUT";
+  params?: Record<string, string>;
   data?: T | null;
 }
 
@@ -19,12 +20,14 @@ export const useFetcher = () => {
     url,
     method,
     headers,
+    params,
     data,
   }: RequestConfig<T>): Promise<T> => {
     const response = await axios({
       url: `http://localhost/api/routes/${url}`,
       method,
       headers,
+      params,
       data,
     });
     return response.data;
@@ -64,22 +67,22 @@ export const useFetcher = () => {
           }
         }
       })();
-    }, []);
+    }, [url]);
 
     return { data: fetchedData, isLoading, error };
   };
 
-  const DELETE = <T>({ url, data }: RequestConfig<T>): FetchReturn<T> => {
-    const [fetchedData, setFetchedData] = React.useState<T | null>(null);
+  const DELETE = <T>(props: RequestConfig<T>) => {
+    console.log(props.url);
     (async () => {
       const response = await Fetcher<T>({
-        url: url,
-        data: data,
+        url: props.url,
         method: "DELETE",
+        params: props.params,
+        headers: props.headers,
       });
-      setFetchedData(response);
+      console.log(response);
     })();
-    return { data: fetchedData };
   };
 
   return { POST, GET, DELETE };
