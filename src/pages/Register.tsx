@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, Select } from 'antd';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { registerUser } from '../services/user';
 
 const Register: React.FC = () => {
   const [form] = Form.useForm();
   const [submittable, setSubmittable] = useState(false);
+  const [doesEmailExist, setDoesEmailExist] = useState(false);
   const navigate = useNavigate();
   
   const values = Form.useWatch([], form);
@@ -34,18 +35,12 @@ const Register: React.FC = () => {
 
   const onRegister = async (values: any) => {
     console.log(values);
-    try {
-      const response = await axios.post('http://localhost/api/routes/customer.php', {
-        action: 'register',
-        name: values.name,
-        email: values.email,
-        password: values.password,
-        role_id: values.role,
-      });
-
-      console.log(response.data); // Handle the response from the server
-    } catch (error) {
-      console.error('Error:', error);
+    const result = await registerUser(values);
+    if (result?.data.status === 1) {
+      navigate('/login');
+    } else if (result?.data.status === 0) {
+      setDoesEmailExist(true);
+      setSubmittable(false);
     }
   };
 
@@ -60,8 +55,14 @@ const Register: React.FC = () => {
       <Form.Item name="name" label="Name" rules={[{ required: true }]}>
         <Input />
       </Form.Item>
-      <Form.Item name="email" label="Email" rules={[{ required: true }]}>
-        <Input />
+      <Form.Item 
+        name={"email"}
+        label={ doesEmailExist ? "Fail" : "Email"}
+        rules={[{ required: true }]}
+        validateStatus={ doesEmailExist ? 'error' : ''}
+        help={ doesEmailExist ? 'Customer already exists. Try another email.' : ''}
+      >
+        <Input id="error"/>
       </Form.Item>
       <Form.Item name="password" label="Password" rules={[{ required: true }]}>
         <Input />

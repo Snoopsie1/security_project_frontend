@@ -11,15 +11,15 @@ const Login: React.FC = () => {
   const onLogin = async (values: any) => {
     console.log(values);
     try {
-      const response = await axios.post('http://localhost/api/routes/customer.php', {
+      const response = await axios.post('/api/routes/customer.php', {
         action: 'login',
         email: values.email,
         password: values.password,
       });
-
+      
+      console.log(response.data); 
       const { token } = response.data;
 
-      console.log(response.data);
       if (token) {
         localStorage.setItem('jwt', token); // Save JWT to local storage
         navigate('/'); // Redirect to home or authenticated route
