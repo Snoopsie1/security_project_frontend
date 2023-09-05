@@ -1,39 +1,47 @@
 import { useEffect, useState } from 'react';
 import { Customer } from '../types/customer';
-import { getAllCustomers, getCustomerById, deleteCustomer, createCustomer } from '../services/customer';
+import { getAllCustomers} from '../services/customer';
 import { Button, Table } from 'antd';
 
 const Customers = () => {
-    const [customers, setCustomers] = useState<Customer[] | null>(null);
-  
-    useEffect(() => {
-        getAllCustomers().then(customerData => {
-          setCustomers(customerData !== null ? customerData : []);
-        });
-      }, []);
-  
-    const columns = [
-      {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-      },
-      {
-        title: 'Email',
-        dataIndex: 'email',
-        key: 'email',
-      },
-    ];
-  
-    if (customers === null) {
-        return "Loading customers..."
+  const [customers, setCustomers] = useState<Customer[] | null>(null);
+
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const customerData = await getAllCustomers();
+        setCustomers(customerData || []); // Handle null or undefined response
+      } catch (error) {
+        console.error('Error fetching customer data:', error);
+        // Handle the error gracefully, e.g., show an error message to the user
       }
-    
-      const customersWithKey = customers.map(customer => ({
-        ...customer,
-        key: customer.id.toString(),
-      }));
-    
+    };
+  
+    fetchCustomers();
+  }, []);
+
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+  ];
+
+  if (customers === null) {
+    return <div>Loading customers...</div>;
+  }
+
+  const customersWithKey = customers.map((customer) => ({
+    ...customer,
+    key: customer.id.toString(),
+  }));
+
   
 
   return (

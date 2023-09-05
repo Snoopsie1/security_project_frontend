@@ -1,4 +1,4 @@
-import { DownloadOutlined, GiftOutlined } from '@ant-design/icons';
+import { SmileOutlined, DownloadOutlined, GiftOutlined } from '@ant-design/icons';
 import { Menu, MenuProps } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +19,11 @@ const Navbar = () => {
       key: '/orders',
       icon: <DownloadOutlined/>
     }, 
-    // TODO: Tilføj Users
+    {
+      label: 'Customers',
+      key: '/customers',
+      icon: <SmileOutlined/>
+    }
   ];
 
   useEffect(() => {
