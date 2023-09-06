@@ -4,6 +4,7 @@ import Layout from './components/layout/Layout';
 import Order from "./pages/Purchase";
 import Login from './pages/Login'; // Import your login component
 import Register from './pages/Register'; // Import your register component
+import Customers from "./pages/Customer";
 import './globals.css';
 import { useEffect, useState } from 'react';
 
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/" element={authed()}>
             <Route path="/products" element={<Products />} />
             <Route path="/orders" element={<Order />} /> {/* Skal skiftes til Orders component */}
+            <Route path="/customers" element={<Customers />} />{""}
           </Route>
         </Routes>
       </Layout>

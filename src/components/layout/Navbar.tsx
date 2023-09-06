@@ -1,4 +1,4 @@
-import { DownloadOutlined, GiftOutlined, LogoutOutlined } from '@ant-design/icons';
+import { SmileOutlined, DownloadOutlined, GiftOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Button, Menu, MenuProps } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
@@ -23,7 +23,11 @@ const Navbar = () => {
       key: '/purchases',
       icon: <DownloadOutlined/>
     }, 
-    // TODO: Tilføj Users
+    {
+      label: 'Customers',
+      key: '/customers',
+      icon: <SmileOutlined/>
+    },
     {
       label: (
         <Button icon={<LogoutOutlined/>} onClick={handleLogOut}/>
