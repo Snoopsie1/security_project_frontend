@@ -5,7 +5,7 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 import { Button, Menu, MenuProps } from "antd";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useCustomerStore from "../../store/customer.store";
 

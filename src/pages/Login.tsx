@@ -5,7 +5,7 @@ import jwt from 'jwt-decode';
 
 import axios from 'axios';
 import useCustomerStore from '../store/customer.store';
-import { Customer, CustomerJWT } from '../types/customer';
+import { CustomerJWT } from '../types/customer';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
