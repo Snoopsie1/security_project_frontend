@@ -1,10 +1,15 @@
 import React from 'react';
 import { Button, Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import jwt from 'jwt-decode';
+
 import axios from 'axios';
+import useCustomerStore from '../store/customer.store';
+import { Customer, CustomerJWT } from '../types/customer';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const setCustomer = useCustomerStore((state) => state.setCustomer);
   
   const onLogin = async (values: any) => {
     console.log(values);
@@ -15,11 +20,21 @@ const Login: React.FC = () => {
         password: values.password,
       });
       
-      console.log(response); 
       const token = response.data.jwt;
 
-      console.log(response.data.jwt);
       if (token) {
+        try {
+          const decodedToken: CustomerJWT = jwt(token);
+          setCustomer({
+            id: decodedToken.user_id,
+            name: decodedToken.user_name,
+            email: decodedToken.user_email,
+            password: decodedToken.user_password,
+            roleId: decodedToken.user_role,
+          })
+        } catch (error) {
+          console.error('Error decoding JWT: ', error);
+        }
         localStorage.setItem('jwt', token); // Save JWT to local storage
         navigate('/products')
         window.location.reload();
