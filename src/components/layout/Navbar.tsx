@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const Navbar = () => {
   const navigate = useNavigate();
   const fullpath = window.location.pathname;
-  const [current, setCurrent] = useState('/');
+  const [current, setCurrent] = useState('/products');
 
   const handleLogOut = () => {
     localStorage.removeItem('jwt');
