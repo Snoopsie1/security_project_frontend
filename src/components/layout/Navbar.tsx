@@ -7,14 +7,17 @@ import {
 import { Button, Menu, MenuProps } from "antd";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useCustomerStore from "../../store/customer.store";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const fullpath = window.location.pathname;
   const [current, setCurrent] = useState('/products');
+  const resetCustomer = useCustomerStore((state) => state.resetState);
 
   const handleLogOut = () => {
     localStorage.removeItem("jwt");
+    resetCustomer();
     navigate('/login');
     window.location.reload();
   };
