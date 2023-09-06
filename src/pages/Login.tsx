@@ -21,8 +21,7 @@ const Login: React.FC = () => {
       console.log(response.data.jwt);
       if (token) {
         localStorage.setItem('jwt', token); // Save JWT to local storage
-        console.log('hej');
-        navigate('/'); // Redirect to home or authenticated route
+        window.location.reload();
       } else {
         console.error('Login failed');
       }
