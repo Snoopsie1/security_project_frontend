@@ -33,15 +33,18 @@ export const useFetcher = () => {
     return response.data;
   };
 
-  function POST<T>({ url, data }: RequestConfig<T>) {
+  function POST<T>({ url, data }: RequestConfig<T>): FetchReturn<T> {
+    const [fetchedData, setFetchedData] = React.useState<T | null>(null);
     (async () => {
       const response = await Fetcher<T>({
         url: url,
         method: "POST",
         data: data,
       });
-      console.log(response);
+      setFetchedData(response);
     })();
+
+    return { data: fetchedData };
   }
 
   const GET = <T>({ url }: RequestConfig<T>): FetchReturn<T> => {
