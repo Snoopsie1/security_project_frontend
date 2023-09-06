@@ -5,13 +5,18 @@ import Foo from './pages/Foo';
 import Login from './pages/Login'; // Import your login component
 import Register from './pages/Register'; // Import your register component
 import './globals.css';
+import { useEffect, useState } from 'react';
 
 const App = () => {
-  const isAuthenticated = !!localStorage.getItem('jwt'); // Check for JWT in local storage
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('jwt')); // Check for JWT in local storage
+
+  useEffect(() => {
+
+  }, [isAuthenticated]);
 
   const authed = () => {
+    console.log('authenticated', isAuthenticated);
     if (!isAuthenticated) return <Navigate to="/login" />;
-    console.log(isAuthenticated);
     return <Products />;
   };
 

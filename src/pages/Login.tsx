@@ -1,10 +1,8 @@
 import React from 'react';
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-
-//TODO: Lav logout som dræber token
 const Login: React.FC = () => {
   const navigate = useNavigate();
   
@@ -17,11 +15,13 @@ const Login: React.FC = () => {
         password: values.password,
       });
       
-      console.log(response.data); 
-      const { token } = response.data;
+      console.log(response); 
+      const token = response.data.jwt;
 
+      console.log(response.data.jwt);
       if (token) {
         localStorage.setItem('jwt', token); // Save JWT to local storage
+        console.log('hej');
         navigate('/'); // Redirect to home or authenticated route
       } else {
         console.error('Login failed');
