@@ -15,6 +15,7 @@ const Navbar = () => {
 
   const handleLogOut = () => {
     localStorage.removeItem("jwt");
+    navigate('/login');
     window.location.reload();
   };
 
