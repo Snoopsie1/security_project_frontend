@@ -24,7 +24,7 @@ export const useFetcher = () => {
     data,
   }: RequestConfig<T>): Promise<T> => {
     const response = await axios({
-      url: `http://localhost/api/routes/${url}`,
+      url: `/api/routes/${url}`,
       method,
       headers,
       params,
