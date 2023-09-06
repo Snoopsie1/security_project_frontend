@@ -1,5 +1,5 @@
-import { SmileOutlined, DownloadOutlined, GiftOutlined } from '@ant-design/icons';
-import { Menu, MenuProps } from 'antd';
+import { SmileOutlined, DownloadOutlined, GiftOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Button, Menu, MenuProps } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
@@ -8,22 +8,32 @@ const Navbar = () => {
   const fullpath = window.location.pathname;
   const [current, setCurrent] = useState('/');
 
+  const handleLogOut = () => {
+    localStorage.removeItem('jwt');
+  }
+
   const items: MenuProps['items'] = [
     {
       label: 'Products',
-      key: '/',
+      key: '/products',
       icon: <GiftOutlined/>
     },
     {
-      label: 'Orders',
-      key: '/orders',
+      label: 'Purchases',
+      key: '/purchases',
       icon: <DownloadOutlined/>
     }, 
     {
       label: 'Customers',
       key: '/customers',
       icon: <SmileOutlined/>
-    }
+    },
+    {
+      label: (
+        <Button icon={<LogoutOutlined/>} onClick={handleLogOut}/>
+      ),
+      key: '/',
+    },
   ];
 
   useEffect(() => {
@@ -32,6 +42,7 @@ const Navbar = () => {
   },[])
 
   const changePage: MenuProps['onClick'] = (e) => {
+    console.log(e.key);
     setCurrent(e.key);
     navigate(e.key);
   }
@@ -41,6 +52,8 @@ const Navbar = () => {
     display: 'flex',
     justifyContent: 'center',
   };
+
+  
 
   return (
     <Menu onClick={changePage} style={centerStyle} selectedKeys={[current]} mode='horizontal' items={items}/>
