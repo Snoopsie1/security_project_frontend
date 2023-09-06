@@ -85,13 +85,13 @@ const Order = () => {
   };
 
   return (
-    <div>
+    <div className="w-full p-5">
       {productsWithKey && (
         <div className="w-full p-5">
           <div className="flex flex-row justify-between mx-5">
-            <h2 className="text-2xl">Orders</h2>
+            <h2 className="text-2xl">Purchases</h2>
             <Button onClick={() => setIsModalOpen(true)} className="w-40">
-              Add Order
+              Add Purchase
             </Button>
           </div>
           <Table dataSource={productsWithKey} columns={columns} />
@@ -109,9 +109,7 @@ const Order = () => {
               >
                 cancel
               </Button>,
-              <Button type="primary" key="create">
-                create
-              </Button>,
+              <Button key="create">create</Button>,
             ]}
           >
             <Input placeholder="lort" />
