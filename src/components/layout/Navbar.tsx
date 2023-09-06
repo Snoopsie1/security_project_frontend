@@ -10,6 +10,7 @@ const Navbar = () => {
 
   const handleLogOut = () => {
     localStorage.removeItem('jwt');
+    window.location.reload();
   }
 
   const items: MenuProps['items'] = [
