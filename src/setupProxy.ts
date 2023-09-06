@@ -1,11 +1,19 @@
-import { createProxyMiddleware } from "http-proxy-middleware";
+// setupProxy.js
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
-export default function setupProxy(app: any) {
-  app.use(
-    "/api",
-    createProxyMiddleware({
-      target: "http://localhost",
-      changeOrigin: true,
-    })
-  );
-}
+module.exports = function (app: any) {
+	app.use(
+		'/api',
+		createProxyMiddleware({
+			target: 'http://localhost:80', // The URL of the external API
+			changeOrigin: true,
+			logLevel: 'debug',
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+				'Access-Control-Allow-Headers':
+					'Origin, X-Requested-With, Content-Type, Accept',
+				'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+			},
+		})
+	);
+};
