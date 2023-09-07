@@ -5,9 +5,7 @@ import { Role } from "../types/role";
 
 type UserState = {
   customer: Customer | null;
-  role: Role | null;
   setCustomer: (customer: Customer | null) => void;
-  setRole: (role: Role | null) => void;
   resetState: () => void;
 };
 
@@ -21,7 +19,6 @@ const useCustomerStore = create<UserState>()(
     (set) => ({
       ...initialState,
       setCustomer: (customer) => set({ customer: customer }),
-      setRole: (role) => set({ role: role }),
       resetState: () => set(initialState),
     }),
     {
