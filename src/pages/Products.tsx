@@ -82,6 +82,7 @@ const Products = () => {
     if (result?.data.status === 1) {
       openNotification('bottomRight', values.name, values.price);
       form.resetFields();
+      getAllProducts().then(products => setProducts(products));
       setIsOpen(false);
     } else if (result?.data.status === 0) {
       setDoesProductExist(true);
