@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { Product } from '../types/product';
 import { getAllProducts } from '../services/product';
 import { Button, Table } from 'antd';
+import useCustomerStore from '../store/customer.store';
 
 const Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const customer = useCustomerStore((state) => state.customer);
 
   useEffect(() => {
     getAllProducts().then(products => setProducts(products));
@@ -38,7 +40,7 @@ const Products = () => {
     <div className='w-full p-5'>
       <div className='flex flex-row justify-between mx-5'>
         <h2 className='text-2xl'>Products</h2>
-        <Button className='w-40' onClick={() => addProduct()}>Add Product</Button>
+        { customer?.id === 1 && <Button className='w-40' onClick={() => addProduct()}>Add Product</Button>}
       </div>
         <Table dataSource={productsWithKey} columns={columns}/>
     </div>
