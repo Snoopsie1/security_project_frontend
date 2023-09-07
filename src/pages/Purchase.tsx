@@ -73,8 +73,9 @@ const Order = () => {
       }))
     : null;
 
-  const addPurchase = (purchase: Purchase) => {
-    POST<Purchase>({ url: "purchase.php", data: purchase });
+  const addPurchase = (productIds: number[]) => {
+    //number array of product ids
+    POST<number[]>({ url: "purchase.php", data: productIds });
   };
 
   const deletePurchase = (id: number, role: string) => {
@@ -90,7 +91,7 @@ const Order = () => {
         <div className="w-full p-5">
           <div className="flex flex-row justify-between mx-5">
             <h2 className="text-2xl">Purchases</h2>
-            <Button onClick={() => setIsModalOpen(true)} className="w-40">
+            <Button onClick={() => addPurchase([10, 11, 14])} className="w-40">
               Add Purchase
             </Button>
           </div>
