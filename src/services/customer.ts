@@ -1,19 +1,20 @@
+import axios from "axios";
 import { Customer } from "../types/customer";
 
 export const getAllCustomers = async () => {
   try {
-  const response = await fetch('http://localhost/api/routes/customer.php?');
+    const response = await axios.get('api/routes/customer.php');
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch customers. Status ${response.status}`);
+    if (response.status !== 200) {
+      throw new Error(`Failed to fetch customers. Status ${response.status}`);
+    }
+
+    const customers: Customer[] = response.data;
+    return customers;
+  } catch (error) {
+    console.error(error);
+    return null; 
   }
-
-  const customers: Customer[] = await response.json();
-  return customers;
-} catch (error) {
-  console.error(error);
-  return null; 
-}
 }
 
 export const getCustomerById = async (customerId: number) => {
@@ -31,6 +32,30 @@ export const getCustomerById = async (customerId: number) => {
     return null; 
   }
 };
+
+export const editCustomer = async (customerId: number, updatedData: {name?: string; email?: string }) => {
+  try {
+    const response = await axios.put(`api/routes/customer.php`, {
+      id: customerId,
+      name: updatedData.name,
+      email: updatedData.email,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log(response)
+    if (response.status === 200) {
+      console.log('Customer updated')
+      return true; // Successfully edited customer
+    } else {
+      return false; // Failed to edit customer
+    }
+  } catch (error) {
+    console.error('Error editing customer:', error);
+    return false; // Failed to edit customer
+  }
+};
+
 
 export const deleteCustomer = async (customerId: number, customerRole: number) => {
   try {
