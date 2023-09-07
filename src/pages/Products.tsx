@@ -31,8 +31,9 @@ const Products = () => {
   }));
 
   const addProduct = () => {
-    //TODO: Finish this method
-    console.log('ADDING PRODUCT')
+    if (customer?.roleId === 1) {
+      console.log("Modal burde poppe her");
+    } 
   }
 
 
