@@ -5,7 +5,7 @@ import { registerUser } from '../services/user';
 
 const Register: React.FC = () => {
   const [form] = Form.useForm();
-  const [submittable, setSubmittable] = useState(false);
+  const [isSubmittable, setIsSubmittable] = useState(false);
   const [doesEmailExist, setDoesEmailExist] = useState(false);
   const navigate = useNavigate();
   
@@ -25,10 +25,10 @@ const Register: React.FC = () => {
   useEffect(() => {
     form.validateFields({validateOnly: true}).then(
       () => {
-        setSubmittable(true);
+        setIsSubmittable(true);
       },
       () => {
-        setSubmittable(false);
+        setIsSubmittable(false);
       },
     );
   }, [values]);
@@ -40,7 +40,7 @@ const Register: React.FC = () => {
       navigate('/login');
     } else if (result?.data.status === 0) {
       setDoesEmailExist(true);
-      setSubmittable(false);
+      setIsSubmittable(false);
     }
   };
 
@@ -78,10 +78,10 @@ const Register: React.FC = () => {
         </Form.Item>
         <Form.Item {...tailLayout}>
           <div className='absolute inset-y-0 right-0 space-x-6'>
-          <Button htmlType="submit" onClick={() => navigate('/')}>
+          <Button onClick={() => navigate('/')}>
             Back
           </Button>
-          <Button htmlType="submit" disabled={!submittable}>
+          <Button htmlType="submit" disabled={!isSubmittable}>
             Register
           </Button>
           </div>
