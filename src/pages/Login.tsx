@@ -12,7 +12,6 @@ const Login: React.FC = () => {
   const setCustomer = useCustomerStore((state) => state.setCustomer);
   
   const onLogin = async (values: any) => {
-    console.log(values);
     try {
       const response = await axios.post('/api/routes/customer.php', {
         action: 'login',

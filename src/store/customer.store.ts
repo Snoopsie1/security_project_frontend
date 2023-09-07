@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import { Customer } from "../types/customer";
 import { Role } from "../types/role";
 
-type UserState = {
+type CustomerState = {
   customer: Customer | null;
   setCustomer: (customer: Customer | null) => void;
   resetState: () => void;
@@ -14,7 +14,7 @@ const initialState = {
   role: null,
 };
 
-const useCustomerStore = create<UserState>()(
+const useCustomerStore = create<CustomerState>()(
   persist(
     (set) => ({
       ...initialState,
