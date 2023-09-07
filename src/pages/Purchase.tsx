@@ -3,17 +3,23 @@ import { Button, Table, Modal, Input } from "antd";
 import { useFetcher } from "../services/api";
 import React from "react";
 import { ColumnsType } from "antd/es/table";
+import useCustomerStore from "../store/customer.store";
 
 const Order = () => {
   const { POST, GET, DELETE } = useFetcher();
+  const customer = useCustomerStore((state) => state.customer);
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
   const {
     data: purchases,
     isLoading,
     error,
-  } = GET<Purchase[]>({
-    url: "purchase.php",
-  });
+  } = customer?.roleId === 1
+    ? GET<Purchase[]>({
+        url: "purchase.php",
+      })
+    : GET<Purchase[]>({
+        url: `purchase.php/${customer?.id}`,
+      });
 
   type Iorder = {
     id: number;
