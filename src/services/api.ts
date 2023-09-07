@@ -28,23 +28,23 @@ export const useFetcher = () => {
       method,
       headers,
       params,
-      data,
+      data: JSON.stringify(data),
     });
     return response.data;
   };
 
-  function POST<T>({ url, data }: RequestConfig<T>): FetchReturn<T> {
-    const [fetchedData, setFetchedData] = React.useState<T | null>(null);
+  function POST<T>({ url, data }: RequestConfig<T>) {
     (async () => {
       const response = await Fetcher<T>({
         url: url,
         method: "POST",
         data: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
-      setFetchedData(response);
+      console.log(response);
     })();
-
-    return { data: fetchedData };
   }
 
   const GET = <T>({ url }: RequestConfig<T>): FetchReturn<T> => {
