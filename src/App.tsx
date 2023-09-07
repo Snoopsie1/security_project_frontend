@@ -6,14 +6,15 @@ import Login from "./pages/Login"; // Import your login component
 import Register from "./pages/Register"; // Import your register component
 import Customers from "./pages/Customer";
 import "./globals.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import useCustomerStore from "./store/customer.store";
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    !!localStorage.getItem("jwt")
-  ); // Check for JWT in local storage
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("jwt")); // Check for JWT in local storage
+  const customer = useCustomerStore((state) => state.customer);
 
-  useEffect(() => {}, [isAuthenticated]);
+  //Demo for at vise den finder og binder en customer
+  console.log('customer: ', customer);
 
   const authed = () => {
     console.log("authenticated", isAuthenticated);
@@ -26,18 +27,17 @@ const App = () => {
         <Routes>
           <Route
             path="/register"
-            element={isAuthenticated ? <Navigate to="/" /> : <Register />}
+            element={isAuthenticated ? <Navigate to="/products" /> : <Register />}
           />
           <Route
             path="/login"
-            element={isAuthenticated ? <Navigate to="/" /> : <Login />}
+            element={isAuthenticated ? <Navigate to="/products" /> : <Login />}
           />
           <Route path="/" element={authed()}>
             <Route path="/products" element={<Products />} />
-            <Route path="/orders" element={<Order />} />{" "}
+            <Route path="/orders" element={<Order />} />
             {/* Skal skiftes til Orders component */}
             <Route path="/customers" element={<Customers />} />
-            {""}
           </Route>
         </Routes>
       </Layout>

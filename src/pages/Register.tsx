@@ -45,47 +45,49 @@ const Register: React.FC = () => {
   };
 
   return (
-    <Form
-      {...layout}
-      form={form}
-      name="control-hooks"
-      onFinish={onRegister}
-      style={{ maxWidth: 600 }}
-    >
-      <Form.Item name="name" label="Name" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item 
-        name={"email"}
-        label={ doesEmailExist ? "Fail" : "Email"}
-        rules={[{ required: true }]}
-        validateStatus={ doesEmailExist ? 'error' : ''}
-        help={ doesEmailExist ? 'Customer already exists. Try another email.' : ''}
+    <div className='h-full w-full flex items-center justify-center'>
+      <Form
+        {...layout}
+        form={form}
+        name="control-hooks"
+        onFinish={onRegister}
+        style={{ maxWidth: 600 }}
       >
-        <Input id="error"/>
-      </Form.Item>
-      <Form.Item name="password" label="Password" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="role" label="Role" rules={[{ required: true }]}>
-        <Select
-          allowClear
+        <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item 
+          name={"email"}
+          label={ doesEmailExist ? "Fail" : "Email"}
+          rules={[{ required: true }]}
+          validateStatus={ doesEmailExist ? 'error' : ''}
+          help={ doesEmailExist ? 'Customer already exists. Try another email.' : ''}
         >
-          <Option value="1">Admin</Option>
-          <Option value="2">Customer</Option>
-        </Select>
-      </Form.Item>
-      <Form.Item {...tailLayout}>
-        <div className='absolute inset-y-0 right-0 space-x-6'>
-        <Button htmlType="submit" onClick={() => navigate('/')}>
-          Back
-        </Button>
-        <Button htmlType="submit" disabled={!submittable}>
-          Register
-        </Button>
-        </div>
-      </Form.Item>
-    </Form>
+          <Input id="error"/>
+        </Form.Item>
+        <Form.Item name="password" label="Password" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name="role" label="Role" rules={[{ required: true }]}>
+          <Select
+            allowClear
+          >
+            <Option value="1">Admin</Option>
+            <Option value="2">Customer</Option>
+          </Select>
+        </Form.Item>
+        <Form.Item {...tailLayout}>
+          <div className='absolute inset-y-0 right-0 space-x-6'>
+          <Button htmlType="submit" onClick={() => navigate('/')}>
+            Back
+          </Button>
+          <Button htmlType="submit" disabled={!submittable}>
+            Register
+          </Button>
+          </div>
+        </Form.Item>
+      </Form>
+      </div>
   );
 };
 
