@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Product } from '../types/product';
-import { getAllProducts } from '../services/product';
-import { Button, Form, Input, Modal, Table } from 'antd';
+import { addProduct, getAllProducts } from '../services/product';
+import { Button, Form, Input, Modal, Table, notification } from 'antd';
 import useCustomerStore from '../store/customer.store';
 import { useForm } from 'antd/es/form/Form';
+import Context from '@ant-design/icons/lib/components/Context';
+import { NotificationPlacement } from 'antd/es/notification/interface';
 
 const Products = () => {
 
@@ -11,6 +13,8 @@ const Products = () => {
   const customer = useCustomerStore((state) => state.customer);
   /* - - - - - LOCAL STATE - - - - - */
   const [isSubmittable, setIsSubmittable] = useState(false);
+  const [api, contextHolder] = notification.useNotification();
+  const [doesProductExist, setDoesProductExist] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [form] = useForm();
@@ -53,6 +57,7 @@ const Products = () => {
   const showModal = () => {
     if (customer?.roleId === 1) {
       setIsOpen(true);
+      setIsSubmittable(false);
     } 
   }
 
@@ -62,15 +67,32 @@ const Products = () => {
     }
   }
 
-  const onSubmit = () => {
+  const openNotification = (placement: NotificationPlacement, productName: string, price: number) => {
+    api.success({
+      message: `Product added!`,
+      description: `${productName} costing ${price}kr.- has been added!`,
+      placement,
+    });
+  };
+
+  const onSubmit = async () => {
     console.log('Received Values: ', values);
-    form.resetFields();
-    setIsOpen(false);
+    const result = await addProduct(values, customer?.roleId ?? 2);
+    console.log(result);
+    if (result?.data.status === 1) {
+      openNotification('bottomRight', values.name, values.price);
+      form.resetFields();
+      setIsOpen(false);
+    } else if (result?.data.status === 0) {
+      setDoesProductExist(true);
+      setIsSubmittable(false);
+    }
   }
 
 
   return (
     <div className='w-full p-5'>
+      {contextHolder}
       <div className='flex flex-row justify-between mx-5'>
         <h2 className='text-2xl'>Products</h2>
         { customer?.id === 1 && <Button className='w-40' onClick={() => showModal()}>Add Product</Button>}
@@ -93,6 +115,8 @@ const Products = () => {
                 name='name'
                 label='Name'
                 rules={[{ required: true, message: 'Please enter a name!'}]}
+                validateStatus={ doesProductExist ? 'error' : ''}
+                help={ doesProductExist ? 'Product already exists. Try another product name.' : ''}
               >
                 <Input/>
               </Form.Item>
@@ -121,6 +145,7 @@ const Products = () => {
               </div>
             </Form>
         </Modal> 
+        {/* Modal End */}
     </div>
   )
 }
