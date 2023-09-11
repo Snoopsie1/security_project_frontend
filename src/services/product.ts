@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Product } from "../types/product";
 
 export const getAllProducts = async () => {
@@ -10,4 +10,15 @@ export const getAllProducts = async () => {
 
   const products: Product[] = await response.data;
   return products;
+}
+
+export const addProduct = async (values: any, customerRole: number) => {
+  const response = await axios.post('/api/routes/product.php', {
+    name: values.name,
+    price: values.price,
+    role: customerRole,
+  }).catch((error: AxiosError) => {
+    return error.response;
+  })
+  return response;
 }

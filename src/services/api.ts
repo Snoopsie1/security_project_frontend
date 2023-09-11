@@ -23,14 +23,20 @@ export const useFetcher = () => {
     params,
     data,
   }: RequestConfig<T>): Promise<T> => {
-    const response = await axios({
-      url: `/api/routes/${url}`,
-      method,
-      headers,
-      params,
-      data: JSON.stringify(data),
-    });
-    return response.data;
+    console.log(data);
+    try {
+      const response = await axios({
+        url: `/api/routes/${url}`,
+        data: data,
+        method: method,
+        headers: headers,
+        params: params,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Request failed:", error);
+      throw error;
+    }
   };
 
   function POST<T>({ url, data }: RequestConfig<T>) {
@@ -47,7 +53,7 @@ export const useFetcher = () => {
     })();
   }
 
-  const GET = <T>({ url }: RequestConfig<T>): FetchReturn<T> => {
+  const GET = <T>({ url, data }: RequestConfig<T>): FetchReturn<T> => {
     const [fetchedData, setFetchedData] = React.useState<T | null>(null);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [error, setError] = React.useState<string | null>(null);
@@ -56,7 +62,15 @@ export const useFetcher = () => {
       (async () => {
         try {
           setIsLoading(true);
-          const response = await Fetcher<T>({ url: url, method: "GET" });
+          const response = await Fetcher<T>({
+            url: url,
+            method: "GET",
+            data: data,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          console.log(response);
           setFetchedData(response);
           setIsLoading(false);
         } catch (err) {
