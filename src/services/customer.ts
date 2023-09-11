@@ -60,23 +60,33 @@ export const editCustomer = async (customerId: number, updatedData: {name?: stri
 export const deleteCustomer = async (customerId: number, customerRole: number) => {
   try {
     if (customerRole === 1) {
-      const response = await fetch(`http://localhost/api/routes/customer.php?id=${customerId}&customerRole=${customerRole}`, {
-        method: 'DELETE',
+      const response = await axios.delete(`http://localhost/api/routes/customer.php`, {
+        data: {
+          id: customerId,
+          role_id: customerRole, // Include role_id in the request body
+        },
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
+      console.log(response);
 
-      if (!response.ok) {
-        throw new Error(`Failed to delete customer. Status ${response.status}`);
+      if (response.status === 200) {
+        console.log('Customer deleted');
+        return true; // Successfully deleted customer
+      } else {
+        return false; // Failed to delete customer
       }
-
-      return true;
     } else {
-      return false;
+      return false; // Unauthorized action
     }
   } catch (error) {
-    console.error(error);
-    return false;
+    console.error('Error deleting customer:', error);
+    return false; // Failed to delete customer
   }
 };
+
+
 
 export const createCustomer = async (name: string, email: string, password: string, role_id: number) => {
   try {

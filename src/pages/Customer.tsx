@@ -1,17 +1,41 @@
 import { useEffect, useState } from 'react';
-import { Customer } from '../types/customer';
+import { Customer, CustomerJWT } from '../types/customer';
 import { getAllCustomers, deleteCustomer, editCustomer} from '../services/customer';
 import { Button, Popconfirm, Table } from 'antd';
+import jwt from 'jwt-decode'
 import { message } from 'antd';
+import jwtDecode from 'jwt-decode';
 
 const Customers = () => {
   const [customers, setCustomers] = useState<Customer[] | null>(null);
-
+  const [currentCustomer, setCurrentCustomer] = useState<Customer | null>(null);
+  
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
         const customerData = await getAllCustomers();
         setCustomers(customerData || []); // Handle null or undefined response
+  
+        // Retrieve the JWT token from local storage
+        const token = localStorage.getItem('jwt');
+  
+        if (token) {
+          try {
+            // Decode the JWT token to get user information
+            const decodedToken: CustomerJWT = jwtDecode(token);
+  
+            // Use the user information from the token to find the current customer
+            if (customerData && customerData.length > 0) {
+              const loggedInCustomer = customerData.find(customer => customer.id === decodedToken.user_id);
+  
+              if (loggedInCustomer) {
+                setCurrentCustomer(loggedInCustomer);
+              }
+            }
+          } catch (error) {
+            console.error('Error decoding JWT: ', error);
+          }
+        }
       } catch (error) {
         console.error('Error fetching customer data:', error);
         // Handle the error gracefully, e.g., show an error message to the user
@@ -19,7 +43,8 @@ const Customers = () => {
     };
   
     fetchCustomers();
-  }, []);
+  }, []); 
+
 
   const columns = [
     {
@@ -38,12 +63,12 @@ const Customers = () => {
       key: 'actions',
       render: (text: string, customer: Customer) => (
         <div>
-          <Button type="primary" onClick={() => handleEdit(customer)}>
-            Edit
-          </Button>
+            <Button style={{backgroundColor: 'blue', color: 'white'}} onClick={() => handleEdit(customer)}>
+              Edit
+            </Button>
           <Popconfirm
             title="Are you sure you want to delete this customer?"
-            onConfirm={() => handleDelete(customer.id)}
+            onConfirm={() => handleDelete(customer.id, customer.roleId)}
             okText="Yes"
             cancelText="No"
           >
@@ -84,20 +109,25 @@ const Customers = () => {
   
   
 
-  const handleDelete = async (customerId: number) => {
-    try {
-      const success = await deleteCustomer(customerId, 1); // Assuming role_id of admin is 1
-      if (success) {
-        message.success('Customer deleted successfully');
-        // Refresh the customer list or update the UI as needed
-      } else {
-        message.error('Failed to delete customer');
+  const handleDelete = async (customerId: number, customerRole: number) => {
+    if (customerRole === 1) {
+      // Show a confirmation prompt to confirm the deletion
+      const confirmDeletion = window.confirm('Are you sure you want to delete this customer?');
+  
+      if (confirmDeletion) {
+        try {
+          await deleteCustomer(customerId, customerRole); // Use customerRole to check permissions
+          // You can optionally refresh the customer list or update the UI as needed
+        } catch (error) {
+          console.error('Error deleting customer:', error);
+        }
       }
-    } catch (error) {
-      console.error('Error deleting customer:', error);
-      message.error('Failed to delete customer');
+    } else {
+      // Display a message indicating that only admin can delete customers
+      alert('Only admin users can delete customers.');
     }
-  };
+  };  
+  
 
 
   if (customers === null) {
@@ -113,6 +143,11 @@ const Customers = () => {
 
   return (
     <div className='w-full p-5'>
+     <div className="text-center my-4">
+        {currentCustomer && (
+         <h1 className="text-xl">Logged in as: {currentCustomer.name}</h1>
+         )}
+        </div>
       <div className='flex flex-row justify-between mx-5'>
         <h2 className='text-2xl'>Customer</h2>
       </div>
