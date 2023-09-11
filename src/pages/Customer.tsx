@@ -44,9 +44,21 @@ const Customers = () => {
   
     fetchCustomers();
   }, []); 
+  
+  const customerColums = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+  ];
 
-
-  const columns = [
+  const adminColumns = [
     {
       title: 'Name',
       dataIndex: 'name',
@@ -68,7 +80,7 @@ const Customers = () => {
             </Button>
           <Popconfirm
             title="Are you sure you want to delete this customer?"
-            onConfirm={() => handleDelete(customer.id, customer.roleId)}
+            onConfirm={() => handleDelete(customer.id, customer.role_id)}
             okText="Yes"
             cancelText="No"
           >
@@ -78,6 +90,8 @@ const Customers = () => {
       ),
     },
   ];
+  console.log(currentCustomer);
+  const columnsToUse = currentCustomer?.role_id === 1 ? adminColumns : customerColums;
 
   const handleEdit = async (customer: Customer) => {
     const newName = prompt('Enter new name:', customer.name);
@@ -151,7 +165,7 @@ const Customers = () => {
       <div className='flex flex-row justify-between mx-5'>
         <h2 className='text-2xl'>Customer</h2>
       </div>
-        <Table dataSource={customersWithKey} columns={columns}/>
+        <Table dataSource={customersWithKey} columns={columnsToUse}/>
     </div>
   )
 }

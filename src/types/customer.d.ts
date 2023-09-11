@@ -3,7 +3,7 @@ export type Customer = {
   name: string;
   email: string;
   password: string;
-  roleId: number;
+  role_id: number;
 }
 
 export type CustomerJWT = {
