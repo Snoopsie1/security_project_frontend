@@ -13,6 +13,7 @@ interface FetchReturn<T> {
   data: T | null;
   isLoading?: boolean;
   error?: string | null;
+  revalidate: () => Promise<void>;
 }
 
 export const useFetcher = () => {
@@ -53,37 +54,38 @@ export const useFetcher = () => {
     })();
   }
 
-  const GET = <T>({ url, data }: RequestConfig<T>): FetchReturn<T> => {
+  const GET = <T>({ url }: RequestConfig<T>): FetchReturn<T> => {
     const [fetchedData, setFetchedData] = React.useState<T | null>(null);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [error, setError] = React.useState<string | null>(null);
 
-    useEffect(() => {
-      (async () => {
-        try {
-          setIsLoading(true);
-          const response = await Fetcher<T>({
-            url: url,
-            method: "GET",
-            data: data,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          console.log(response);
-          setFetchedData(response);
-          setIsLoading(false);
-        } catch (err) {
-          setIsLoading(false);
+    const revalidate = React.useCallback(async () => {
+      try {
+        setIsLoading(true);
+        const response = await Fetcher<T>({
+          url: url,
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        console.log(response);
+        setFetchedData(response);
+        setIsLoading(false);
+      } catch (err) {
+        setIsLoading(false);
 
-          if (err instanceof Error) {
-            setError(err.message);
-          }
+        if (err instanceof Error) {
+          setError(err.message);
         }
-      })();
+      }
     }, [url]);
 
-    return { data: fetchedData, isLoading, error };
+    useEffect(() => {
+      revalidate();
+    }, [revalidate]);
+
+    return { data: fetchedData, isLoading, error, revalidate };
   };
 
   const DELETE = <T>(props: RequestConfig<T>) => {
