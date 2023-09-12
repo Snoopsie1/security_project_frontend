@@ -81,6 +81,7 @@ const Customers = () => {
           <Popconfirm
             title="Are you sure you want to delete this customer?"
             onConfirm={() => handleDelete(customer.id, customer.role_id)}
+            okButtonProps={{style: {background: 'blue', borderColor: 'blue', color: 'white'} }}
             okText="Yes"
             cancelText="No"
           >

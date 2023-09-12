@@ -23,13 +23,13 @@ export const addProduct = async (values: any, customerRole: number) => {
   return response;
 }
 
-export const deleteProduct = async (productId: number, customerRole: number) => {
+export const deleteProduct = async (productId: number, customerRole: number, customerId: number) => {
   try {
     if (customerRole === 1) {
       const response = await axios.delete(`http://localhost/api/routes/product.php`, {
         data: {
           id: productId,
-          role_id: customerRole, // Include role_id in the request body
+          customer_id: customerId,
         },
         headers: {
           'Content-Type': 'application/json',
