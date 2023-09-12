@@ -47,7 +47,7 @@ const Products = () => {
       dataIndex: 'price',
       key: 'price',
     },
-    customer?.roleId === 1 ?
+    customer?.role_id === 1 ?
     (
       {
         title: 'Action',
