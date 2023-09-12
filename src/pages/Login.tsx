@@ -29,7 +29,7 @@ const Login: React.FC = () => {
             name: decodedToken.user_name,
             email: decodedToken.user_email,
             password: decodedToken.user_password,
-            roleId: decodedToken.user_role,
+            role_id: decodedToken.user_role,
           });
         } catch (error) {
           console.error("Error decoding JWT: ", error);

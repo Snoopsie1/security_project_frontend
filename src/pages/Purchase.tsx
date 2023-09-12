@@ -13,7 +13,7 @@ const Order = () => {
     data: purchases,
     isLoading,
     error,
-  } = customer?.roleId === 1
+  } = customer?.role_id === 1
     ? GET<Purchase[]>({
         url: "purchase.php",
       })
