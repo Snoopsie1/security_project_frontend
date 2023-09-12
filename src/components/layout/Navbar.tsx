@@ -50,7 +50,6 @@ const Navbar = () => {
   }, []);
 
   const changePage: MenuProps["onClick"] = (e) => {
-    console.log(e.key);
     setCurrent(e.key);
     navigate(e.key);
   };
