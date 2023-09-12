@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Product } from '../types/product';
 import { addProduct, getAllProducts } from '../services/product';
-import { Button, Form, Input, Modal, Table, notification } from 'antd';
+import { Button, Form, Input, Modal, Popconfirm, Table, notification } from 'antd';
 import useCustomerStore from '../store/customer.store';
 import { useForm } from 'antd/es/form/Form';
 import Context from '@ant-design/icons/lib/components/Context';
@@ -36,8 +36,8 @@ const Products = () => {
     );
   }, [values]);
 
-  const deleteProduct = () => {
-    
+  const deleteProduct = (productId: number, customerRoleId: number) => {
+    console.log()
   }
 
   const columns = [
@@ -57,7 +57,16 @@ const Products = () => {
         title: 'Action',
         dataIndex: '',
         key: 'x',
-        render: () => <Button style={{ backgroundColor: 'red', borderColor: 'red', color: 'white' }} onClick={ deleteProduct }>Delete</Button>
+        render: (product: Product) => (
+          <Popconfirm
+            title="Are you sure you want to delete this customer?"
+            onConfirm={() => deleteProduct(product.id, customer.role_id)}
+            okText="Yes"
+            cancelText="No"
+          >
+          <Button style={{ backgroundColor: 'red', borderColor: 'red', color: 'white' }}>Delete</Button>
+          </Popconfirm>
+        )
       } 
     ) : ({})
   ];
