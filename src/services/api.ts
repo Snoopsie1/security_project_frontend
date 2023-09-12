@@ -13,6 +13,7 @@ interface FetchReturn<T> {
   data: T | null;
   isLoading?: boolean;
   error?: string | null;
+  revalidate: () => Promise<void>;
 }
 
 export const useFetcher = () => {
@@ -23,14 +24,20 @@ export const useFetcher = () => {
     params,
     data,
   }: RequestConfig<T>): Promise<T> => {
-    const response = await axios({
-      url: `/api/routes/${url}`,
-      method,
-      headers,
-      params,
-      data: JSON.stringify(data),
-    });
-    return response.data;
+    console.log(data);
+    try {
+      const response = await axios({
+        url: `/api/routes/${url}`,
+        data: data,
+        method: method,
+        headers: headers,
+        params: params,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Request failed:", error);
+      throw error;
+    }
   };
 
   function POST<T>({ url, data }: RequestConfig<T>) {
@@ -52,24 +59,33 @@ export const useFetcher = () => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [error, setError] = React.useState<string | null>(null);
 
-    useEffect(() => {
-      (async () => {
-        try {
-          setIsLoading(true);
-          const response = await Fetcher<T>({ url: url, method: "GET" });
-          setFetchedData(response);
-          setIsLoading(false);
-        } catch (err) {
-          setIsLoading(false);
+    const revalidate = React.useCallback(async () => {
+      try {
+        setIsLoading(true);
+        const response = await Fetcher<T>({
+          url: url,
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        console.log(response);
+        setFetchedData(response);
+        setIsLoading(false);
+      } catch (err) {
+        setIsLoading(false);
 
-          if (err instanceof Error) {
-            setError(err.message);
-          }
+        if (err instanceof Error) {
+          setError(err.message);
         }
-      })();
+      }
     }, [url]);
 
-    return { data: fetchedData, isLoading, error };
+    useEffect(() => {
+      revalidate();
+    }, [revalidate]);
+
+    return { data: fetchedData, isLoading, error, revalidate };
   };
 
   const DELETE = <T>(props: RequestConfig<T>) => {

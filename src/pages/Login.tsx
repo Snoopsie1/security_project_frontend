@@ -1,24 +1,24 @@
-import React from 'react';
-import { Button, Form, Input } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import jwt from 'jwt-decode';
+import React from "react";
+import { Button, Form, Input } from "antd";
+import { useNavigate } from "react-router-dom";
+import jwt from "jwt-decode";
 
-import axios from 'axios';
-import useCustomerStore from '../store/customer.store';
-import { CustomerJWT } from '../types/customer';
+import axios from "axios";
+import useCustomerStore from "../store/customer.store";
+import { CustomerJWT } from "../types/customer";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const setCustomer = useCustomerStore((state) => state.setCustomer);
-  
+
   const onLogin = async (values: any) => {
     try {
-      const response = await axios.post('/api/routes/customer.php', {
-        action: 'login',
+      const response = await axios.post("/api/routes/customer.php", {
+        action: "login",
         email: values.email,
         password: values.password,
       });
-      
+
       const token = response.data.jwt;
 
       if (token) {
@@ -29,24 +29,24 @@ const Login: React.FC = () => {
             name: decodedToken.user_name,
             email: decodedToken.user_email,
             password: decodedToken.user_password,
-            roleId: decodedToken.user_role,
-          })
+            role_id: decodedToken.user_role,
+          });
         } catch (error) {
-          console.error('Error decoding JWT: ', error);
+          console.error("Error decoding JWT: ", error);
         }
-        localStorage.setItem('jwt', token); // Save JWT to local storage
-        navigate('/products')
+        localStorage.setItem("jwt", token); // Save JWT to local storage
+        navigate("/products");
         window.location.reload();
       } else {
-        console.error('Login failed');
+        console.error("Login failed");
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
-  
+
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
+    console.log("Failed:", errorInfo);
   };
 
   type FieldType = {
@@ -55,7 +55,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className='h-full w-full flex items-center justify-center'>
+    <div className="h-full w-full flex items-center justify-center">
       <Form
         name="basic"
         labelCol={{ span: 8 }}
@@ -69,7 +69,7 @@ const Login: React.FC = () => {
         <Form.Item<FieldType>
           label="Email"
           name="email"
-          rules={[{ required: true, message: 'Please input your email!' }]}
+          rules={[{ required: true, message: "Please input your email!" }]}
         >
           <Input />
         </Form.Item>
@@ -77,25 +77,22 @@ const Login: React.FC = () => {
         <Form.Item<FieldType>
           label="Password"
           name="password"
-          rules={[{ required: true, message: 'Please input your password!' }]}
+          rules={[{ required: true, message: "Please input your password!" }]}
         >
           <Input.Password />
         </Form.Item>
 
-        <div className='flex flex-row ml-28 gap-x-20'> 
+        <div className="flex flex-row ml-28 gap-x-20">
           <Form.Item>
-            <Button htmlType="submit">
-              Submit
-            </Button>
+            <Button htmlType="submit">Submit</Button>
           </Form.Item>
           <Form.Item>
-            <Button onClick={() => navigate('/register')}>Register</Button>
+            <Button onClick={() => navigate("/register")}>Register</Button>
           </Form.Item>
-
         </div>
       </Form>
     </div>
-  )
-}  
+  );
+};
 
 export default Login;

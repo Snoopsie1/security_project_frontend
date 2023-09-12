@@ -64,14 +64,14 @@ const Products = () => {
   }));
 
   const showModal = () => {
-    if (customer?.roleId === 1) {
+    if (customer?.role_id === 1) {
       setIsOpen(true);
       setIsSubmittable(false);
     } 
   }
 
   const cancelModal = () => {
-    if (customer?.roleId === 1) {
+    if (customer?.role_id === 1) {
       setIsOpen(false);
     }
   }
@@ -86,7 +86,7 @@ const Products = () => {
 
   const onSubmit = async () => {
     console.log('Received Values: ', values);
-    const result = await addProduct(values, customer?.roleId ?? 2);
+    const result = await addProduct(values, customer?.role_id ?? 2);
     console.log(result);
     if (result?.data.status === 1) {
       openNotification('bottomRight', values.name, values.price);
