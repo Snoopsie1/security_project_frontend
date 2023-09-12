@@ -36,6 +36,10 @@ const Products = () => {
     );
   }, [values]);
 
+  const deleteProduct = () => {
+    
+  }
+
   const columns = [
     {
       title: 'Name',
@@ -53,7 +57,7 @@ const Products = () => {
         title: 'Action',
         dataIndex: '',
         key: 'x',
-        render: () => <Button>Delete</Button>
+        render: () => <Button style={{ backgroundColor: 'red', borderColor: 'red', color: 'white' }} onClick={ deleteProduct }>Delete</Button>
       } 
     ) : ({})
   ];
