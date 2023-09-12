@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Customer } from "../types/customer";
-import { Role } from "../types/role";
 
 type CustomerState = {
   customer: Customer | null;

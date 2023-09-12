@@ -34,9 +34,9 @@ const App = () => {
             element={isAuthenticated ? <Navigate to="/products" /> : <Login />}
           />
           <Route path="/" element={authed()}>
+            <Route path="/" element={<Products/>}/>
             <Route path="/products" element={<Products />} />
             <Route path="/orders" element={<Order />} />
-            {/* Skal skiftes til Orders component */}
             <Route path="/customers" element={<Customers />} />
           </Route>
         </Routes>
