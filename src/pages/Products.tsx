@@ -40,13 +40,22 @@ const Products = () => {
     {
       title: 'Name',
       dataIndex: 'name',
-      key: 'name',
+      key: 'name', 
     },
     {
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
     },
+    customer?.roleId === 1 ?
+    (
+      {
+        title: 'Action',
+        dataIndex: '',
+        key: 'x',
+        render: () => <Button>Delete</Button>
+      } 
+    ) : ({})
   ];
 
   const productsWithKey = products.map(product => ({
