@@ -39,7 +39,7 @@ const Products = () => {
     if (customerRole === 1) {
         try {
           await deleteProduct(productId, customerRole, customerId);
-          window.location.reload();
+          getAllProducts().then(products => setProducts(products));
         } catch (error) {
           console.error('Error deleting product:', error);
         }

@@ -13,7 +13,7 @@ export const getAllCustomers = async () => {
     return customers;
   } catch (error) {
     console.error(error);
-    return null; 
+    return null;
   }
 }
 
@@ -29,11 +29,11 @@ export const getCustomerById = async (customerId: number) => {
     return customerData;
   } catch (error) {
     console.error(error);
-    return null; 
+    return null;
   }
 };
 
-export const editCustomer = async (customerId: number, updatedData: {name?: string; email?: string }) => {
+export const editCustomer = async (customerId: number, updatedData: { name?: string; email?: string }) => {
   try {
     const response = await axios.put(`api/routes/customer.php`, {
       id: customerId,
@@ -57,13 +57,14 @@ export const editCustomer = async (customerId: number, updatedData: {name?: stri
 };
 
 
-export const deleteCustomer = async (customerId: number, customerRole: number) => {
+export const deleteCustomer = async (customerId: number, customerRole: number, currentCustomerid: number) => {
   try {
     if (customerRole === 1) {
       const response = await axios.delete(`http://localhost/api/routes/customer.php`, {
         data: {
           id: customerId,
           role_id: customerRole, // Include role_id in the request body
+          current_customer_id: currentCustomerid,
         },
         headers: {
           'Content-Type': 'application/json',
@@ -105,6 +106,6 @@ export const createCustomer = async (name: string, email: string, password: stri
     return true;
   } catch (error) {
     console.error(error);
-    return false; 
+    return false;
   }
 };
