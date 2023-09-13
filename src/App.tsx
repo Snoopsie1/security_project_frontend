@@ -7,17 +7,11 @@ import Register from "./pages/Register"; // Import your register component
 import Customers from "./pages/Customer";
 import "./globals.css";
 import { useState } from "react";
-import useCustomerStore from "./store/customer.store";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("jwt")); // Check for JWT in local storage
-  const customer = useCustomerStore((state) => state.customer);
-
-  //Demo for at vise den finder og binder en customer
-  console.log('customer: ', customer);
 
   const authed = () => {
-    console.log("authenticated", isAuthenticated);
     if (!isAuthenticated) return <Navigate to="/login" />;
   };
 

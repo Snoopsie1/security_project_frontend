@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Customer, CustomerJWT } from '../types/customer';
 import { getAllCustomers, deleteCustomer, editCustomer} from '../services/customer';
 import { Button, Popconfirm, Table } from 'antd';
-import jwt from 'jwt-decode'
 import { message } from 'antd';
 import jwtDecode from 'jwt-decode';
 
@@ -91,7 +90,7 @@ const Customers = () => {
       ),
     },
   ];
-  console.log('current customer: ', currentCustomer);
+
   const columnsToUse = currentCustomer?.role_id === 1 ? adminColumns : customerColums;
 
   const handleEdit = async (customer: Customer) => {
