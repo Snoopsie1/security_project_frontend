@@ -22,3 +22,30 @@ export const addProduct = async (values: any, customerRole: number) => {
   })
   return response;
 }
+
+export const deleteProduct = async (productId: number, customerRole: number, customerId: number) => {
+  try {
+    if (customerRole === 1) {
+      const response = await axios.delete(`http://localhost/api/routes/product.php`, {
+        data: {
+          id: productId,
+          customer_id: customerId,
+        },
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        return true; // Successfully deleted customer
+      } else {
+        return false; // Failed to delete customer
+      }
+    } else {
+      return false; // Unauthorized action
+    }
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    return false; // Failed to delete customer
+  }
+};

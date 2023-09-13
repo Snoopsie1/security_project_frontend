@@ -24,7 +24,6 @@ export const useFetcher = () => {
     params,
     data,
   }: RequestConfig<T>): Promise<T> => {
-    console.log(data);
     try {
       const response = await axios({
         url: `/api/routes/${url}`,
@@ -50,7 +49,6 @@ export const useFetcher = () => {
           "Content-Type": "application/json",
         },
       });
-      console.log(response);
     })();
   }
 
@@ -69,7 +67,6 @@ export const useFetcher = () => {
             "Content-Type": "application/json",
           },
         });
-        console.log(response);
         setFetchedData(response);
         setIsLoading(false);
       } catch (err) {
@@ -89,7 +86,6 @@ export const useFetcher = () => {
   };
 
   const DELETE = <T>(props: RequestConfig<T>) => {
-    console.log(props.url);
     (async () => {
       const response = await Fetcher<T>({
         url: props.url,
@@ -97,7 +93,6 @@ export const useFetcher = () => {
         params: props.params,
         headers: props.headers,
       });
-      console.log(response);
     })();
   };
 

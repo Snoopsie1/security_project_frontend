@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Product } from '../types/product';
-import { addProduct, getAllProducts } from '../services/product';
-import { Button, Form, Input, Modal, Table, notification } from 'antd';
+import { addProduct, deleteProduct, getAllProducts } from '../services/product';
+import { Button, Form, Input, Modal, Popconfirm, Table, notification } from 'antd';
 import useCustomerStore from '../store/customer.store';
 import { useForm } from 'antd/es/form/Form';
-import Context from '@ant-design/icons/lib/components/Context';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 
 const Products = () => {
@@ -36,17 +35,50 @@ const Products = () => {
     );
   }, [values]);
 
+  const handleDelete = async (productId: number, customerRole: number, customerId: number) => {
+    if (customerRole === 1) {
+        try {
+          await deleteProduct(productId, customerRole, customerId);
+          getAllProducts().then(products => setProducts(products));
+        } catch (error) {
+          console.error('Error deleting product:', error);
+        }
+    } else {
+      // Display a message indicating that only admin can delete customers
+      alert('Only admin users can delete products.');
+    }
+  }
+
   const columns = [
     {
       title: 'Name',
       dataIndex: 'name',
-      key: 'name',
+      key: 'name', 
     },
     {
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
     },
+    customer?.role_id === 1 ?
+    (
+      {
+        title: 'Action',
+        dataIndex: '',
+        key: 'x',
+        render: (product: Product) => (
+          <Popconfirm
+            title="Are you sure you want to delete this product?"
+            onConfirm={() => handleDelete(product.id, customer.role_id, customer.id)}
+            okButtonProps={{style: {background: 'blue', borderColor: 'blue', color: 'white'} }}
+            okText="Yes"
+            cancelText="No"
+          >
+          <Button style={{ backgroundColor: 'red', borderColor: 'red', color: 'white' }}>Delete</Button>
+          </Popconfirm>
+        )
+      } 
+    ) : ({})
   ];
 
   const productsWithKey = products.map(product => ({
@@ -76,9 +108,7 @@ const Products = () => {
   };
 
   const onSubmit = async () => {
-    console.log('Received Values: ', values);
     const result = await addProduct(values, customer?.role_id ?? 2);
-    console.log(result);
     if (result?.data.status === 1) {
       openNotification('bottomRight', values.name, values.price);
       form.resetFields();

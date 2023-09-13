@@ -46,7 +46,7 @@ const Login: React.FC = () => {
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+    console.error("Failed:", errorInfo);
   };
 
   type FieldType = {

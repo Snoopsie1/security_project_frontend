@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Customer, CustomerJWT } from '../types/customer';
 import { getAllCustomers, deleteCustomer, editCustomer} from '../services/customer';
 import { Button, Popconfirm, Table } from 'antd';
-import jwt from 'jwt-decode'
 import { message } from 'antd';
 import jwtDecode from 'jwt-decode';
 
@@ -80,7 +79,8 @@ const Customers = () => {
             </Button>
           <Popconfirm
             title="Are you sure you want to delete this customer?"
-            onConfirm={() => handleDelete(customer.id, customer.role_id)}
+            onConfirm={() => handleDelete(customer.id, currentCustomer?.role_id ?? 0, currentCustomer?.id ?? 0)}
+            okButtonProps={{style: {background: 'blue', borderColor: 'blue', color: 'white'} }}
             okText="Yes"
             cancelText="No"
           >
@@ -90,7 +90,7 @@ const Customers = () => {
       ),
     },
   ];
-  console.log(currentCustomer);
+
   const columnsToUse = currentCustomer?.role_id === 1 ? adminColumns : customerColums;
 
   const handleEdit = async (customer: Customer) => {
@@ -123,14 +123,14 @@ const Customers = () => {
   
   
 
-  const handleDelete = async (customerId: number, customerRole: number) => {
+  const handleDelete = async (customerId: number, customerRole: number, currentCustomerId: number) => {
     if (customerRole === 1) {
       // Show a confirmation prompt to confirm the deletion
       const confirmDeletion = window.confirm('Are you sure you want to delete this customer?');
   
       if (confirmDeletion) {
         try {
-          await deleteCustomer(customerId, customerRole); // Use customerRole to check permissions
+          await deleteCustomer(customerId, customerRole, currentCustomerId); // Use customerRole to check permissions
           // You can optionally refresh the customer list or update the UI as needed
         } catch (error) {
           console.error('Error deleting customer:', error);

@@ -16,7 +16,7 @@ const Order = () => {
     isLoading,
     error,
     revalidate,
-  } = customer?.roleId === 1
+  } = customer?.role_id === 1
     ? GET<Purchase[]>({
         url: "purchase.php",
       })
@@ -94,9 +94,7 @@ const Order = () => {
     customerID: number | undefined;
     productIds: number[];
   }) => {
-    console.log("jeg er inde i add purchase");
     if (purchase.customerID !== undefined) {
-      console.log("jeg er inde i add if statement");
       //number array of product ids
       POST<{ customerID: number | undefined; productIds: number[] }>({
         url: "purchase.php",
