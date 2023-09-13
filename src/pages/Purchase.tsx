@@ -87,6 +87,10 @@ const Order = () => {
       url: `purchase.php/${id}`,
       params: { role: "1" },
     });
+    POST({
+      url: `logging.php/${customer?.id}`,
+      data: { message: "User deleted purchase" },
+    });
     revalidate();
   };
 
