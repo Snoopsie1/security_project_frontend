@@ -34,7 +34,6 @@ const Register: React.FC = () => {
   }, [values]);
 
   const onRegister = async (values: any) => {
-    console.log(values);
     const result = await registerUser(values);
     if (result?.data.status === 1) {
       navigate('/login');

@@ -35,10 +35,8 @@ export const deleteProduct = async (productId: number, customerRole: number, cus
           'Content-Type': 'application/json',
         },
       });
-      console.log(response);
 
       if (response.status === 200) {
-        console.log('Product deleted');
         return true; // Successfully deleted customer
       } else {
         return false; // Failed to delete customer

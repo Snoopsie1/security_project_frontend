@@ -43,9 +43,7 @@ export const editCustomer = async (customerId: number, updatedData: { name?: str
         'Content-Type': 'application/json',
       },
     });
-    console.log(response)
     if (response.status === 200) {
-      console.log('Customer updated')
       return true; // Successfully edited customer
     } else {
       return false; // Failed to edit customer
@@ -70,10 +68,8 @@ export const deleteCustomer = async (customerId: number, customerRole: number, c
           'Content-Type': 'application/json',
         },
       });
-      console.log(response);
 
       if (response.status === 200) {
-        console.log('Customer deleted');
         return true; // Successfully deleted customer
       } else {
         return false; // Failed to delete customer

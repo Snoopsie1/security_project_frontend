@@ -108,9 +108,7 @@ const Products = () => {
   };
 
   const onSubmit = async () => {
-    console.log('Received Values: ', values);
     const result = await addProduct(values, customer?.role_id ?? 2);
-    console.log(result);
     if (result?.data.status === 1) {
       openNotification('bottomRight', values.name, values.price);
       form.resetFields();
