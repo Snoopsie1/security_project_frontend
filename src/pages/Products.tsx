@@ -126,7 +126,7 @@ const Products = () => {
       {contextHolder}
       <div className='flex flex-row justify-between mx-5'>
         <h2 className='text-2xl'>Products</h2>
-        { customer?.id === 1 && <Button className='w-40' onClick={() => showModal()}>Add Product</Button>}
+        { customer?.role_id === 1 && <Button className='w-40' onClick={() => showModal()}>Add Product</Button>}
       </div>
         <Table dataSource={productsWithKey} columns={columns}/>
         {/* Modal */}

@@ -5,9 +5,10 @@ module.exports = function (app: any) {
 	app.use(
 		'/api',
 		createProxyMiddleware({
-			target: 'http://localhost:80', // The URL of the external API
+			target: 'https://localhost:443', // The URL of the external API
 			changeOrigin: true,
 			logLevel: 'debug',
+			secure: true,
 			headers: {
 				'Access-Control-Allow-Origin': '*',
 				'Access-Control-Allow-Headers':
